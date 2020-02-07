@@ -35,6 +35,7 @@ public class HuffmanTreeTest {
                 "the wheels on the bus go round and round " +
                 "all through the town";
 
+        testString = "go go gophers";
         char[] segments = testString.toCharArray();
 
         for( char segment: segments ) {
@@ -44,5 +45,9 @@ public class HuffmanTreeTest {
         HuffmanTree<Character> huffmanTree = new HuffmanTree<Character>( characterFrequencyTable );
 
         huffmanTree.printHuffmanCodes();
+
+        System.out.println( "\n\n");
+
+        System.out.println( huffmanTree.getHeader() );
     }
 }
