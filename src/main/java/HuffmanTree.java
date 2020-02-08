@@ -1,21 +1,81 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Stack;
 
 public class HuffmanTree<SegmentType> {
 
     private HuffNode treeRoot;
-    private FrequencyTable frequencyTable;
-    private HashMap<SegmentType, HuffCodeInfo> segmentCodes;
+    private HashMap<SegmentType, HuffCodeInfo> segmentCodes = new HashMap<SegmentType, HuffCodeInfo>();
+    private HuffHeaderInfo headerInfo;
 
-    public HuffmanTree(FrequencyTable<SegmentType> in_frequencyTable) {
-        this.frequencyTable = in_frequencyTable;
-        buildTreeFromFrequencyTable();
+    public HuffmanTree(FrequencyTable<SegmentType> frequencyTable) {
 
-        segmentCodes = new HashMap<SegmentType, HuffCodeInfo>();
+        buildTreeFromFrequencyTable(frequencyTable);
         buildHuffmanCodes();
+        buildHeader();
     }
 
-    private void buildTreeFromFrequencyTable() {
+    public HuffmanTree(String treeHeaderString) {
+
+        buildTreeFromHeaderString(treeHeaderString);
+        buildHuffmanCodes();
+        buildHeader();
+    }
+
+    private void buildTreeFromHeaderString(String treeHeaderString) {
+        Stack<HuffNode> nodeStack = new Stack<HuffNode>();
+
+        char[] headerChars = treeHeaderString.toCharArray();
+
+        int i = 0;
+        int numChars = headerChars.length;
+
+        while (i < numChars) {
+
+            // FixMe( "Figure out how to parse different Segment Types");
+            char c = headerChars[i];
+
+            if (c == '1') {
+
+                if (numChars - i < 1)
+                    throw new ArrayIndexOutOfBoundsException("Expecting another character after indication of leaf node");
+
+                HuffNode newNode = new HuffNode();
+                newNode.setSegmentValue(headerChars[i + 1]);
+                newNode.setFrequency(0); // we don't get frequency info in the string header
+
+                nodeStack.push(newNode);
+                i += 2;
+            } else if (c == '0') {
+
+                int nodeStackSize = nodeStack.size();
+
+                if (nodeStackSize == 0) {
+                    // Special case of empty tree
+                    this.treeRoot = new HuffNode();
+                    this.treeRoot.setFrequency(0);
+                    i++;
+                }
+                // if there's only one node in the stack, then we are done
+                else if (nodeStackSize == 1) {
+                    this.treeRoot = nodeStack.pop();
+                    i++;
+                } else {
+                    // we pop the two items from the stack
+                    HuffNode newNode = new HuffNode();
+                    newNode.setRight(nodeStack.pop());
+                    newNode.setLeft(nodeStack.pop());
+                    newNode.setFrequency(0);
+
+                    nodeStack.push(newNode);
+                    i++;
+                }
+            }
+        }
+    }
+
+
+    private void buildTreeFromFrequencyTable(FrequencyTable<SegmentType> frequencyTable) {
 
         // 1. Create leaf nodes for each element
         ArrayList<HuffNode> workingTable = new ArrayList<HuffNode>();
@@ -67,7 +127,16 @@ public class HuffmanTree<SegmentType> {
             workingTable.remove(0);
         }
 
-        treeRoot = workingTable.get(0);
+        // handle case of no segments
+        if (workingTable.size() > 0) {
+            treeRoot = workingTable.get(0);
+        } else {
+            treeRoot = new HuffNode();
+            treeRoot.setFrequency(0);
+            treeRoot.left = null;
+            treeRoot.right = null;
+        }
+
     }
 
     private void traverseTreeAndBuildCodeTable(HuffNode startingNode, String prefix) {
@@ -84,11 +153,13 @@ public class HuffmanTree<SegmentType> {
             // do left
             String newPrefix = prefix + "0";
 
-            traverseTreeAndBuildCodeTable(startingNode.left, newPrefix);
+            if (startingNode.hasLeft())
+                traverseTreeAndBuildCodeTable(startingNode.left, newPrefix);
 
             // do right
             newPrefix = prefix + "1";
-            traverseTreeAndBuildCodeTable(startingNode.right, newPrefix);
+            if (startingNode.hasRight())
+                traverseTreeAndBuildCodeTable(startingNode.right, newPrefix);
         }
     }
 
@@ -107,50 +178,63 @@ public class HuffmanTree<SegmentType> {
     }
 
 
-    private void postOrderTraverse( HuffNode currNode, ArrayList<HuffNode> result ) {
+    private void postOrderTraverse(HuffNode currNode, ArrayList<HuffNode> result) {
 
         // base case: leaf node - add to the result
-        if( currNode.isLeaf() ) {
-            result.add( currNode );
-        }
-        else
-        {
+        if (currNode.isLeaf()) {
+            result.add(currNode);
+        } else {
             // non-leaf node: add the left, then the right, then self
-            postOrderTraverse( currNode.left, result );
-            postOrderTraverse( currNode.right, result );
-            result.add( currNode );
+            if (currNode.hasLeft())
+                postOrderTraverse(currNode.left, result);
+
+            if (currNode.hasRight())
+                postOrderTraverse(currNode.right, result);
+
+            result.add(currNode);
         }
     }
 
-    public String getHeader() {
+    public String getTreeHeaderString() {
+        return this.headerInfo.getTreeHeader();
+    }
+
+    public void buildHeader() {
 
         ArrayList<HuffNode> postOrderTraversedNodes = new ArrayList<HuffNode>();
-        postOrderTraverse( this.treeRoot, postOrderTraversedNodes );
+        postOrderTraverse(this.treeRoot, postOrderTraversedNodes);
 
         String header = "";
         int numSegments = 0;
 
-        for( HuffNode node : postOrderTraversedNodes ) {
-            if( node.isLeaf() ) {
+        for (HuffNode node : postOrderTraversedNodes) {
+            if (node.isLeaf()) {
                 header += "1" + node.getSegmentValue().toString();
                 numSegments++;
-            }
-            else
+            } else
                 header += "0";
         }
 
-        // add an extra pair of zeros at the end
-        header += "00";
+        header += "0";
 
-        // include the number of segments
-        header += ";" + Integer.toString( numSegments ) + ";";
-
-        return header;
+        this.headerInfo = new HuffHeaderInfo();
+        this.headerInfo.setNumSegments(numSegments);
+        this.headerInfo.setTreeHeader(header);
     }
 
+    public HashMap<SegmentType, String> getSegmentHuffCodeMap() {
+
+        HashMap<SegmentType, String> map = new HashMap<SegmentType, String>();
+
+        segmentCodes.forEach((SegmentType segment, HuffCodeInfo info) -> {
+            map.put(segment, info.getCode());
+        });
+
+        return map;
+    }
 
     class HuffNode<SegmentType> {
-        private int frequency;
+        private int frequency = 0;
         private SegmentType segmentValue = null;
         private HuffNode left = null;
         private HuffNode right = null;
@@ -172,7 +256,7 @@ public class HuffmanTree<SegmentType> {
         }
 
         public boolean isLeaf() {
-            if (segmentValue != null) return true;
+            if (null != this.getSegmentValue()) return true;
             return false;
         }
 
@@ -183,6 +267,17 @@ public class HuffmanTree<SegmentType> {
         public void setRight(HuffNode node) {
             this.right = node;
         }
+
+        public boolean hasLeft() {
+            if (this.left != null) return true;
+            return false;
+        }
+
+        public boolean hasRight() {
+            if (this.right != null )return true;
+            return false;
+        }
+
     }
 
     class HuffCodeInfo {
@@ -203,6 +298,27 @@ public class HuffmanTree<SegmentType> {
 
         public int getFrequency() {
             return this.frequency;
+        }
+    }
+
+    class HuffHeaderInfo {
+        String treeHeader;
+        int numSegments;
+
+        public void setTreeHeader(String treeHeaderString) {
+            treeHeader = treeHeaderString;
+        }
+
+        public void setNumSegments(int numSegments) {
+            this.numSegments = numSegments;
+        }
+
+        public String getTreeHeader() {
+            return treeHeader;
+        }
+
+        public int getNumSegments() {
+            return numSegments;
         }
     }
 

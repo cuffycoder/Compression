@@ -1,5 +1,11 @@
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+
+import static junit.framework.TestCase.assertTrue;
+
 public class HuffmanTreeTest {
 
     @Test
@@ -12,42 +18,67 @@ public class HuffmanTreeTest {
                 "round and round " +
                 "the wheels on the bus go round and round " +
                 "all through the town";
-        String[] segments = testString.split( " " );
+        String[] segments = testString.split(" ");
 
-        for( String segment: segments ) {
+        for (String segment : segments) {
             stringFrequencyTable.addSingle(segment);
-            stringFrequencyTable.addSingle( " ");
+            stringFrequencyTable.addSingle(" ");
         }
 
-        HuffmanTree<String> huffmanTree = new HuffmanTree<String>( stringFrequencyTable );
+        HuffmanTree<String> huffmanTree = new HuffmanTree<String>(stringFrequencyTable);
 
         huffmanTree.printHuffmanCodes();
     }
 
     @Test
-    public void encodeCharacterTree() {
-        FrequencyTable<Character> characterFrequencyTable = new FrequencyTable<Character>();
+    public void encodeAndDecodeCharacterTree() {
 
-        String testString = "grant me the serenity to accept the things I cannot change the courage to change the things I can and the wisdom to know the difference";
-        testString = "the wheels on the bus go round and round " +
-                "round and round " +
-                "round and round " +
-                "the wheels on the bus go round and round " +
-                "all through the town";
+        ArrayList<String> testStrings = new ArrayList<String>();
+        testStrings.add("go go gophers");
+        testStrings.add("the wheels on the bus go round and round round and round round and round the wheels on the bus go round and round all through the town");
+        testStrings.add("a");
+        testStrings.add("");
+        testStrings.add("bb");
+        testStrings.add("1a5");
 
-        testString = "go go gophers";
-        char[] segments = testString.toCharArray();
+        for (String testString : testStrings) {
+            System.out.println("\n\nTest String: \"" + testString + "\"");
 
-        for( char segment: segments ) {
-            characterFrequencyTable.addSingle(segment);
+            char[] segments = testString.toCharArray();
+
+            // Build the Frequency table and also get a set of all characters
+            FrequencyTable<Character> characterFrequencyTable = new FrequencyTable<Character>();
+            HashSet<Character> allCharsInTestString = new HashSet<Character>();
+
+            for (char segment : segments) {
+                characterFrequencyTable.addSingle(segment);
+
+                allCharsInTestString.add(segment);
+            }
+
+            HuffmanTree<Character> huffmanTree = new HuffmanTree<Character>(characterFrequencyTable);
+
+            huffmanTree.printHuffmanCodes();
+
+            HashMap<Character, String> huffCodeMap = huffmanTree.getSegmentHuffCodeMap();
+
+            // all characters in the test String should be in the huffCodeMap
+            System.out.println(huffCodeMap.keySet());
+            System.out.println(allCharsInTestString);
+
+            assertTrue(huffCodeMap.keySet().equals(allCharsInTestString));
+
+            System.out.println("\n\n");
+
+            String treeHeaderString = huffmanTree.getTreeHeaderString();
+
+            System.out.println(treeHeaderString);
+
+            HuffmanTree<Character> huffmanTreeRecreate = new HuffmanTree<Character>(treeHeaderString);
+
+            assertTrue(huffCodeMap.equals(huffmanTreeRecreate.getSegmentHuffCodeMap()));
+
+            huffmanTreeRecreate.printHuffmanCodes();
         }
-
-        HuffmanTree<Character> huffmanTree = new HuffmanTree<Character>( characterFrequencyTable );
-
-        huffmanTree.printHuffmanCodes();
-
-        System.out.println( "\n\n");
-
-        System.out.println( huffmanTree.getHeader() );
     }
 }
