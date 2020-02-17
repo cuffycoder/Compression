@@ -26,8 +26,6 @@ public class HuffmanTreeTest {
         }
 
         HuffmanTree<String> huffmanTree = new HuffmanTree<String>(stringFrequencyTable);
-
-        huffmanTree.printHuffmanCodes();
     }
 
     @Test
@@ -40,6 +38,7 @@ public class HuffmanTreeTest {
         testStrings.add("");
         testStrings.add("bb");
         testStrings.add("1a5");
+        testStrings.add( "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ;.,~-_");
 
         for (String testString : testStrings) {
             System.out.println("\n\nTest String: \"" + testString + "\"");
@@ -58,8 +57,6 @@ public class HuffmanTreeTest {
 
             HuffmanTree<Character> huffmanTree = new HuffmanTree<Character>(characterFrequencyTable);
 
-            huffmanTree.printHuffmanCodes();
-
             HashMap<Character, String> huffCodeMap = huffmanTree.getSegmentHuffCodeMap();
 
             // all characters in the test String should be in the huffCodeMap
@@ -77,8 +74,6 @@ public class HuffmanTreeTest {
             HuffmanTree<Character> huffmanTreeRecreate = new HuffmanTree<Character>(treeHeaderString);
 
             assertTrue(huffCodeMap.equals(huffmanTreeRecreate.getSegmentHuffCodeMap()));
-
-            huffmanTreeRecreate.printHuffmanCodes();
         }
     }
 }

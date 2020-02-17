@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Stack;
 
 public class HuffmanBitStream {
 
@@ -65,7 +67,7 @@ public class HuffmanBitStream {
         return (blockList.size() * blockSize) - totalBitsSet;
     }
 
-    public void addBit(boolean bitOn) {
+    public void pushBit(boolean bitOn) {
 
         // if no capacity, add another long
         if (capacity() == 0) {
@@ -85,6 +87,32 @@ public class HuffmanBitStream {
 
         totalBitsSet++;
     }
+
+    public Stack<Boolean> getBitStack() {
+        Stack<Boolean> bitStack = new Stack<Boolean>();
+
+        long bitsLeftToPush = totalBitsSet;
+
+        for (int i = 0; i < blockList.size(); i++) {
+            Long currBlock = blockList.get(i);
+            int bitPos = blockSize - 1;
+
+            while (bitsLeftToPush > 0 && bitPos >= 0) {
+
+                if ((currBlock & (masks[bitPos])) != 0)
+                    bitStack.push( true );
+                else
+                    bitStack.push( false );
+
+                bitsLeftToPush--;
+                bitPos--;
+            }
+        }
+
+        Collections.reverse( bitStack );
+        return bitStack;
+    }
+
 
     public long numBitsInStream() { return totalBitsSet; }
 
@@ -108,7 +136,7 @@ public class HuffmanBitStream {
             System.out.println( block + "\t" + Long.toBinaryString( block ) );
     }
 
-    public String intToBase62( long n ) {
+    private String intToBase62( long n ) {
         StringBuilder result = new StringBuilder();
 
         if( 0 == n ) {
@@ -127,7 +155,7 @@ public class HuffmanBitStream {
         return result.reverse().toString();
     }
 
-    public long intFromBase62EncodedString( String base62EncodedString ) {
+    private long intFromBase62EncodedString( String base62EncodedString ) {
         char[] chars = base62EncodedString.toCharArray();
 
         int base_len = BASE_ALPHABET.length;

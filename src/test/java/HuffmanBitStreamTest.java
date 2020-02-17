@@ -19,21 +19,21 @@ public class HuffmanBitStreamTest {
         // one below, at, and one above the block size
         HuffmanBitStream streamBlockBoundaries = new HuffmanBitStream();
         for (int i = 0; i < 15; i++) {
-            streamBlockBoundaries.addBit(false);
-            streamBlockBoundaries.addBit(true);
+            streamBlockBoundaries.pushBit(false);
+            streamBlockBoundaries.pushBit(true);
         }
-        streamBlockBoundaries.addBit(true);
+        streamBlockBoundaries.pushBit(true);
         String expectedResult = "0101010101010101010101010101011";
         assertEquals(expectedResult, streamBlockBoundaries.toString());
-        streamBlockBoundaries.addBit(false);
+        streamBlockBoundaries.pushBit(false);
         expectedResult += "0";
         assertEquals(expectedResult, streamBlockBoundaries.toString());
 
-        streamBlockBoundaries.addBit(false);
+        streamBlockBoundaries.pushBit(false);
         expectedResult += "0";
         assertEquals(expectedResult, streamBlockBoundaries.toString());
 
-        streamBlockBoundaries.addBit(true);
+        streamBlockBoundaries.pushBit(true);
         expectedResult += "1";
         assertEquals(expectedResult, streamBlockBoundaries.toString());
 
@@ -41,20 +41,20 @@ public class HuffmanBitStreamTest {
         HuffmanBitStream stream2 = new HuffmanBitStream();
 
         for (int i = 0; i < 32; i++)
-            stream2.addBit(false);
+            stream2.pushBit(false);
 
         assertEquals("00000000000000000000000000000000", stream2.toString());
-        stream2.addBit(true);
+        stream2.pushBit(true);
         assertEquals("000000000000000000000000000000001", stream2.toString());
 
 
         HuffmanBitStream stream3 = new HuffmanBitStream();
 
         for (int i = 0; i < 32; i++)
-            stream3.addBit(true);
+            stream3.pushBit(true);
 
         assertEquals("11111111111111111111111111111111", stream3.toString());
-        stream3.addBit(false);
+        stream3.pushBit(false);
         assertEquals("111111111111111111111111111111110", stream3.toString());
     }
 
@@ -64,9 +64,9 @@ public class HuffmanBitStreamTest {
         HuffmanBitStream stream1 = new HuffmanBitStream();
 
         for (int i = 0; i < 50; i++) {
-            stream1.addBit(true);
+            stream1.pushBit(true);
         }
-        stream1.addBit(false);
+        stream1.pushBit(false);
         String expectedResult = "111111111111111111111111111111111111111111111111110";
         assertTrue(stream1.toString().equals(expectedResult));
 
@@ -95,16 +95,16 @@ public class HuffmanBitStreamTest {
         testCases.add("00000000000000000000000000000000000000000000000000000000000000001");
         testCases.add("11111111111111111111111111111111111111111111111111111111111111111");
         testCases.add("111111111111111111111111111111111111111111111111110111111111111111101111111111111111011111111111111110");
-        
+
 
         for (String testCase : testCases) {
             HuffmanBitStream origStream = new HuffmanBitStream();
 
             for (char c : testCase.toCharArray()) {
                 if ('1' == c) {
-                    origStream.addBit(true);
+                    origStream.pushBit(true);
                 } else
-                    origStream.addBit(false);
+                    origStream.pushBit(false);
             }
 
             System.out.println("\n\n");
@@ -119,9 +119,6 @@ public class HuffmanBitStreamTest {
             System.out.println("Reconstructed As String: " + reconstructedStream.toString());
             System.out.println("Reconstructed As Base62: " + reconstructedStream.toBase62String());
 
-            origStream.showBlocks();
-            reconstructedStream.showBlocks();
-
             assertTrue(reconstructedStream.numBitsInStream() == origStream.numBitsInStream());
             assertTrue(reconstructedStream.toString().equals(testCase));
             assertTrue(reconstructedStream.toString().equals(origStream.toString()));
@@ -130,36 +127,4 @@ public class HuffmanBitStreamTest {
 
     }
 
-    @Test
-    public void scratchTest() {
-        HuffmanBitStream s = new HuffmanBitStream();
-
-        long[] tests = {0L,
-//                1L,
-//                2L,
-//                200L,
-//                3000L,
-//                4000000L,
-                1152921504606846976L};
-
-        System.out.println( "Max Value: " + Long.MAX_VALUE );
-        System.out.println( "Problem:   " + 1152921504606846976L );
-
-        long increment = 2;
-        int num_iters = 0;
-
-//        for (long l = 0L; l < Long.MAX_VALUE; l+=increment ) {
-        for( long l : tests ) {
-            String encoded = s.intToBase62(l);
-            long decoded = s.intFromBase62EncodedString(encoded);
-
-            if (true || decoded != l) {
-                System.out.println(l);
-                System.out.println(encoded);
-                System.out.println(decoded);
-                System.out.println("\n");
-            }
-
-        }
-    }
 }
