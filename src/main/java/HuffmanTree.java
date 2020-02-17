@@ -187,6 +187,10 @@ public class HuffmanTree<SegmentType> {
         if (startingNode.isLeaf()) {
             HuffCodeInfo newCode = new HuffCodeInfo();
 
+            // special case: single segment
+            if( prefix == "" )
+                prefix = "0";
+
             newCode.setCode(prefix);
             newCode.setFrequency(startingNode.getFrequency());
 
@@ -207,7 +211,7 @@ public class HuffmanTree<SegmentType> {
 
     private void buildHuffmanCodes() {
 
-        traverseTreeAndBuildCodeTable(this.treeRoot, "0");
+        traverseTreeAndBuildCodeTable(this.treeRoot, "");
     }
 
 
