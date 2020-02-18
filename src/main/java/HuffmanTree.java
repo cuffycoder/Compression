@@ -73,7 +73,6 @@ public class HuffmanTree<SegmentType> {
 
         while (i < numChars) {
 
-            // FixMe( "Figure out how to parse different Segment Types");
             char c = headerChars[i];
 
             if (c == '1') {
@@ -82,6 +81,7 @@ public class HuffmanTree<SegmentType> {
                     throw new ArrayIndexOutOfBoundsException("Expecting another character after indication of leaf node");
 
                 HuffNode newNode = new HuffNode();
+                // TODO: keep reading until get to an un-escaped 1 or 0
                 newNode.setSegmentValue(headerChars[i + 1]);
                 newNode.setFrequency(0); // we don't get frequency info in the string header
 
@@ -251,6 +251,7 @@ public class HuffmanTree<SegmentType> {
 
         for (HuffNode node : postOrderTraversedNodes) {
             if (node.isLeaf()) {
+                // TODO: escape special delimiter characters before putting in header
                 treeDetails += "1" + node.getSegmentValue().toString();
                 numSegments++;
             } else
