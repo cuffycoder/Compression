@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertTrue;
 
-public class StringCharCompressorTest {
+public class StringPartCompressorTest {
 
     @Test
     public void testCompressUncompress() {
@@ -65,7 +65,7 @@ public class StringCharCompressorTest {
                 "\n");
 
         for( String testString : testStrings ) {
-            StringCharCompressor compressor = new StringCharCompressor( testString );
+            StringPartCompressor compressor = new StringPartCompressor( testString );
 
             String compressedText = compressor.getCompressedText();
 
@@ -74,13 +74,12 @@ public class StringCharCompressorTest {
             System.out.println( "Compressed      : " + compressedText );
             System.out.println( "Size(Compressed): " + compressedText.length() );
 
-            StringCharUncompressor uncompressor = new StringCharUncompressor( compressedText );
+            StringPartUncompressor uncompressor = new StringPartUncompressor( compressedText );
             String uncompressed = uncompressor.getUncompressedString();
             System.out.println( "Uncompressed    : " +  uncompressed );
 
             assertTrue( uncompressed.equals( testString ));
             System.out.println( "\n\n");
-            compressor.showCodes();
 
         }
 

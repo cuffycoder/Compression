@@ -14,8 +14,8 @@ public class HuffmanTreeTest {
 
         String testString = "grant me the serenity to accept the things I cannot change the courage to change the things I can and the wisdom to know the difference";
         testString = "the wheels on the bus go round and round " +
-                "round and round " +
-                "round and round " +
+                "round and round 1" +
+                "round and round 0" +
                 "the wheels on the bus go round and round " +
                 "all through the town";
         String[] segments = testString.split(" ");
@@ -26,6 +26,12 @@ public class HuffmanTreeTest {
         }
 
         HuffmanTree<String> huffmanTree = new HuffmanTree<String>(stringFrequencyTable);
+        String treeHeaderString = huffmanTree.getTreeHeaderString();
+        System.out.println( treeHeaderString );
+
+        HuffmanTree<String> huffmanTreeRecreate = new HuffmanTree<String>(treeHeaderString);
+        System.out.println( huffmanTreeRecreate.getTreeHeaderString() );
+
     }
 
     @Test

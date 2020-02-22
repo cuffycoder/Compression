@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Stack;
+import java.util.*;
 
 public class HuffmanTree<SegmentType> {
 
@@ -8,24 +6,31 @@ public class HuffmanTree<SegmentType> {
     private HashMap<SegmentType, HuffCodeInfo> segmentCodes = new HashMap<SegmentType, HuffCodeInfo>();
     private HuffHeaderInfo headerInfo;
 
+    private static final HashSet<Character> specialCharacters;
+    static {
+        specialCharacters = new HashSet<Character>();
+        specialCharacters.add('0');
+        specialCharacters.add('1');
+        specialCharacters.add('\\');
+    }
+
     private enum CompressedTextParts {
         TREE_DEFINITION,
         COMPRESSED_TEXT
     }
 
     public HuffmanTree(FrequencyTable<SegmentType> frequencyTable) {
-
         buildTreeFromFrequencyTable(frequencyTable);
         buildHuffmanCodes();
     }
 
-    public HuffmanTree(String compressedText ) {
-        HashMap<CompressedTextParts,String> textParts = this.parseCompressedString( compressedText );
-        buildTreeFromHeaderString( textParts.get( CompressedTextParts.TREE_DEFINITION ));
+    public HuffmanTree(String compressedText) {
+        HashMap<CompressedTextParts, String> textParts = this.parseCompressedString(compressedText);
+         buildTreeFromHeaderString(textParts.get(CompressedTextParts.TREE_DEFINITION));
         buildHuffmanCodes();
     }
 
-    private HashMap<CompressedTextParts,String> parseCompressedString( String compressedString ) {
+    private HashMap<CompressedTextParts, String> parseCompressedString(String compressedString) {
         char[] chars = compressedString.toCharArray();
 
         // Format: <NumberOfCharsInTreeDefinition>~<TreeDefinition>~<HuffmanBitStream>
@@ -33,32 +38,32 @@ public class HuffmanTree<SegmentType> {
 
         int idx = 0;
 
-        while( idx < chars.length && chars[idx] != '~' )
+        while (idx < chars.length && chars[idx] != '~')
             treeDefSizeAsString += chars[idx++];
 
-        int treeDefSize = Integer.valueOf( treeDefSizeAsString );
+        int treeDefSize = Integer.valueOf(treeDefSizeAsString);
 
         // now read the next treeDefSize characters
         idx++;
         String treeDef = "";
         int treeDefLeftToRead = treeDefSize;
-        while( treeDefLeftToRead > 0 ) {
+        while (treeDefLeftToRead > 0) {
             treeDef += chars[idx++];
             treeDefLeftToRead--;
         }
 
-        if( chars[idx++] != '~' )
-            throw new RuntimeException( "Expected delimiter" );
+        if (chars[idx++] != '~')
+            throw new RuntimeException("Expected delimiter");
 
         // rest of the string is the actual compressed base62 string
         String base62String = "";
-        while( idx < chars.length ) {
-             base62String += chars[idx++];
+        while (idx < chars.length) {
+            base62String += chars[idx++];
         }
 
-        HashMap<CompressedTextParts,String> result = new HashMap<CompressedTextParts,String>();
-        result.put( CompressedTextParts.TREE_DEFINITION, treeDef );
-        result.put( CompressedTextParts.COMPRESSED_TEXT, base62String );
+        HashMap<CompressedTextParts, String> result = new HashMap<CompressedTextParts, String>();
+        result.put(CompressedTextParts.TREE_DEFINITION, treeDef);
+        result.put(CompressedTextParts.COMPRESSED_TEXT, base62String);
 
         return result;
     }
@@ -81,12 +86,34 @@ public class HuffmanTree<SegmentType> {
                     throw new ArrayIndexOutOfBoundsException("Expecting another character after indication of leaf node");
 
                 HuffNode newNode = new HuffNode();
-                // TODO: keep reading until get to an un-escaped 1 or 0
-                newNode.setSegmentValue(headerChars[i + 1]);
-                newNode.setFrequency(0); // we don't get frequency info in the string header
+                // TODO: keep reading until get to an un-escaped 1 or 0; this may mean we have to just assume SegmentType is String
+                String segment = "";
+                boolean escaped = false;
+                i++;
+                while( i < numChars ) {
 
-                nodeStack.push(newNode);
-                i += 2;
+                    if( !escaped &&'\\' == headerChars[i]) {
+                        escaped = true;
+                        i++;
+                        continue;
+                    }
+
+                    // if we're not escaped and we hit a 1 or 0, stop
+                    if( !escaped && ( '1' == headerChars[i] || '0' == headerChars[i] )) {
+                        newNode.setSegmentValue( segment );
+                        newNode.setFrequency(0); // we don't get frequency info in the string header
+                        nodeStack.push(newNode);
+                        // i += 2; // we are already at the delimiter, don't advance
+                        break;
+                    }
+                    else
+                    {
+                        segment += headerChars[i];
+                        i++;
+                        escaped = false;
+                    }
+                }
+
             } else if (c == '0') {
 
                 int nodeStackSize = nodeStack.size();
@@ -170,8 +197,7 @@ public class HuffmanTree<SegmentType> {
 
         if (workingTable.size() > 0) {
             treeRoot = workingTable.get(0);
-        }
-        else {
+        } else {
             // handle case of no segments
             treeRoot = new HuffNode();
             treeRoot.setFrequency(0);
@@ -188,7 +214,7 @@ public class HuffmanTree<SegmentType> {
             HuffCodeInfo newCode = new HuffCodeInfo();
 
             // special case: single segment
-            if( prefix == "" )
+            if (prefix == "")
                 prefix = "0";
 
             newCode.setCode(prefix);
@@ -251,8 +277,7 @@ public class HuffmanTree<SegmentType> {
 
         for (HuffNode node : postOrderTraversedNodes) {
             if (node.isLeaf()) {
-                // TODO: escape special delimiter characters before putting in header
-                treeDetails += "1" + node.getSegmentValue().toString();
+                treeDetails += "1" + escapeSpecialCharacters(node.getSegmentValue().toString());
                 numSegments++;
             } else
                 treeDetails += "0";
@@ -266,6 +291,19 @@ public class HuffmanTree<SegmentType> {
         return header;
     }
 
+    private String escapeSpecialCharacters(String input) {
+        String result = "";
+
+        for (char c : input.toCharArray()) {
+            if (specialCharacters.contains(c))
+                result += "\\" + c;
+            else
+                result += c;
+        }
+
+        return result;
+    }
+
     public HashMap<SegmentType, String> getSegmentHuffCodeMap() {
 
         HashMap<SegmentType, String> map = new HashMap<SegmentType, String>();
@@ -277,47 +315,46 @@ public class HuffmanTree<SegmentType> {
         return map;
     }
 
-    private String getCompressedBase62( ArrayList<SegmentType> uncompressed ) {
+    private String getCompressedBase62(ArrayList<SegmentType> uncompressed) {
         HuffmanBitStream huffmanBitStream = new HuffmanBitStream();
 
-        for( SegmentType segment : uncompressed ) {
+        for (SegmentType segment : uncompressed) {
 
-            if( segmentCodes.containsKey(segment)) {
+            if (segmentCodes.containsKey(segment)) {
                 HuffCodeInfo codeInfo = segmentCodes.get(segment);
 
                 boolean[] bits = codeInfo.getBinaryPath();
 
-                for( boolean b : bits )
+                for (boolean b : bits)
                     huffmanBitStream.pushBit(b);
-            }
-            else
-                throw new RuntimeException( "No code present for [" + segment + "]. Rebuild tree"  );
+            } else
+                throw new RuntimeException("No code present for [" + segment + "]. Rebuild tree");
         }
 
         return huffmanBitStream.toBase62String();
     }
 
-    public String compressSegments( ArrayList<SegmentType> segments ) {
+    public String compressSegments(ArrayList<SegmentType> segments) {
         String compressed = "";
 
         compressed += this.getTreeHeaderString();
-        compressed += this.getCompressedBase62( segments );
+        compressed += this.getCompressedBase62(segments);
 
         return compressed;
     }
 
-    public ArrayList<SegmentType> uncompress( String compressedStringWithHeader ) {
+    public ArrayList<SegmentType> uncompress(String compressedStringWithHeader) {
 
-        HashMap<CompressedTextParts,String> parsed = this.parseCompressedString( compressedStringWithHeader );
+        HashMap<CompressedTextParts, String> parsed = this.parseCompressedString(compressedStringWithHeader);
 
-        HuffmanBitStream bitStream = new HuffmanBitStream( parsed.get( CompressedTextParts.COMPRESSED_TEXT ));
+        HuffmanBitStream bitStream = new HuffmanBitStream(parsed.get(CompressedTextParts.COMPRESSED_TEXT));
 
-        ArrayList<SegmentType> result = uncompressHuffmanBitStream( bitStream );
+        ArrayList<SegmentType> result = uncompressHuffmanBitStream(bitStream);
 
         return result;
     }
 
-    private ArrayList<SegmentType> uncompressHuffmanBitStream( HuffmanBitStream huffmanBitStream ) {
+    private ArrayList<SegmentType> uncompressHuffmanBitStream(HuffmanBitStream huffmanBitStream) {
         // TODO:
         Stack<Boolean> bitStack = huffmanBitStream.getBitStack();
         ArrayList<SegmentType> result = new ArrayList<SegmentType>();
@@ -325,15 +362,15 @@ public class HuffmanTree<SegmentType> {
         String uncompressedString = "";
 
         // build a reverse hash that maps from code to SegmentType value
-        HashMap<String,SegmentType> codeToSegmentValue = new HashMap<String,SegmentType>();
-        for( SegmentType segmentVal : segmentCodes.keySet() ) {
-            codeToSegmentValue.put( segmentCodes.get( segmentVal ).getCode(), segmentVal );
+        HashMap<String, SegmentType> codeToSegmentValue = new HashMap<String, SegmentType>();
+        for (SegmentType segmentVal : segmentCodes.keySet()) {
+            codeToSegmentValue.put(segmentCodes.get(segmentVal).getCode(), segmentVal);
         }
 
         HuffNode currNode = this.treeRoot;
 
         String currCode = "";
-        while( !bitStack.isEmpty() ) {
+        while (!bitStack.isEmpty()) {
 
             boolean nextBit = bitStack.pop();
 
@@ -343,7 +380,7 @@ public class HuffmanTree<SegmentType> {
                 currCode += "0";
 
             if (codeToSegmentValue.containsKey(currCode)) {
-                result.add(codeToSegmentValue.get(currCode ) );
+                result.add(codeToSegmentValue.get(currCode));
                 currCode = "";
             }
         }
@@ -392,7 +429,7 @@ public class HuffmanTree<SegmentType> {
         }
 
         public boolean hasRight() {
-            if (this.right != null )return true;
+            if (this.right != null) return true;
             return false;
         }
 
@@ -422,8 +459,8 @@ public class HuffmanTree<SegmentType> {
             boolean[] result = new boolean[this.code.length()];
 
             int idx = 0;
-            for( char c: this.code.toCharArray() ) {
-                if( '1' == c )
+            for (char c : this.code.toCharArray()) {
+                if ('1' == c)
                     result[idx] = true;
                 else
                     result[idx] = false;
