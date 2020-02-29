@@ -65,7 +65,7 @@ public class StringPartCompressorTest {
                 "\n");
 
         for( String testString : testStrings ) {
-            StringPartCompressor compressor = new StringPartCompressor( testString );
+            StringPartCompressor compressor = new StringPartCompressor( testString, 3 );
 
             String compressedText = compressor.getCompressedText();
 

@@ -6,12 +6,13 @@ public class StringPartCompressor {
     private String inputString;
     private FrequencyTable<String> frequencyTable;
     private HuffmanTree<String> huffmanTree;
-    private short largestSegment = 4;
+    private int largestSegmentLength = 4;
     private ArrayList<String> uncompressedAsArrayList;
 
-    public StringPartCompressor(String input) {
+    public StringPartCompressor(String input, int largestSegmentLength ) {
         inputString = input;
 
+        this.largestSegmentLength = largestSegmentLength;
         uncompressedAsArrayList = getSegments();
 
         // build the frequency table
@@ -45,8 +46,8 @@ public class StringPartCompressor {
     }
 
     private ArrayList<String> getSegments() {
-        int keywordSegmentLength = 3;
-        HashMap<String, Integer> keywords = filterKeywordsByThreshold(keywordSegmentLength, 5);
+        int keywordSegmentLength = largestSegmentLength;
+        HashMap<String, Integer> keywords = filterKeywordsByThreshold(keywordSegmentLength, 2 );
         ArrayList<String> segments = new ArrayList<String>();
 
         String currWord = "";

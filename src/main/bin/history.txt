@@ -1,0 +1,500 @@
+   68  pwd
+   69  docker build -f ./client/Dockerfile.dev 
+   70  docker build -t cuffycoder/multi-client -f ./client/Dockerfile.dev 
+   71  docker build --help
+   72  docker build -t cuffycoder/multi-client -f ./client/Dockerfile.dev 
+   73  docker build -t cuffycoder/multi-client -f ./client/Dockerfile.dev .
+   74  docker build -t cuffycoder/multi-client -f ./client/Dockerfile.dev ./client
+   75  pwd
+   76  git status
+   77  git add .
+   78  git commit "fix .travis.yml by adding context for dev build"
+   79  git commit -m "fix .travis.yml by adding context for dev build"
+   80  git push origin master
+   81  history
+   82  docker push cuffycoder/multi-client
+   83  pwd
+   84  git status
+   85  git status
+   86  git add .
+   87  git commit "add memory specification in Dockerrun.aws.json"
+   88  git commit -m "add memory specification in Dockerrun.aws.json"
+   89  git push origin/master
+   90  git push origin master
+   91  git status
+   92  git add .
+   93  git commit -m "fix travis.yml formatting" 
+   94  git push origin master
+   95  git status
+   96  git add .
+   97  git commit -m "add missing memory entry for client"
+   98  git push origin master
+   99  git status
+  100  git add .
+  101  git commit -m "change client message"
+  102  git push origin master
+  103  clear'
+  104  clear
+  105  clear
+  106  clear
+  107  which brew
+  108  /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  109  which brew
+  110  brew install kubectl
+  111  which kubectl
+  112  brew install minikube
+  113  minikube start
+  114  minikube update-context
+  115  minikube start
+  116  minikube start
+  117  ls -l /var/lib/kubelet
+  118  minikube start -p gavkube
+  119  minikube delete -p gavkube
+  120  minikube start -p gavkube --vm-driver=virtualbox
+  121  minikube ip
+  122  ping 192.168.64.2
+  123  minikube delete
+  124  minikube delete -p gavkube
+  125  history | grep minikube
+  126  minikube start --vm-driver=virtualbox
+  127  history
+  128  minikube delete
+  129  minikube delete -p gavkube
+  130  minikube start -p gavkube --vm-driver=virtualbox
+  131  minikube status
+  132  history
+  133  minikube ip
+  134  history | kubectl
+  135  history | grep kubectl
+  136  minikube status
+  137  minikube delete
+  138  minikube start --vm-driver=virtualbox
+  139  minikube ip
+  140  docker ps
+  141  env | grep docker
+  142  minikube docker-env
+  143  eval $(minikube docker-env)
+  144  docker ps
+  145  docker ps
+  146  docker ps
+  147  history | grep env
+  148  minikube docker-env
+  149  env | grep -i docker
+  150  docker ps
+  151  docker kill c54bdfa8a74b
+  152  docker kill 12b6bb5d21a7
+  153  docker kill 12b6bb5d21a7
+  154  exit
+  155  docker ps
+  156  cd dev
+  157  ls
+  158  ls
+  159  pwd
+  160  docker compose up --build
+  161  docker compose up --build .
+  162  docker-compose up --build
+  163  docker-compose up
+  164  ls
+  165  pwd
+  166  ls
+  167  cd ..
+  168  ls
+  169  cd complex
+  170  ls
+  171  rm service-account.json
+  172  ls
+  173  exit
+  174  pwd
+  175  ls
+  176  ls -a
+  177  cd ..
+  178  cp complex complex-elastic-beanstalk
+  179  cp -r complex complex-elastic-beanstalk
+  180  ls
+  181  cd complex
+  182  ls
+  183  ls -a
+  184  rm -rf .git
+  185  ls
+  186  ls
+  187  pwd
+  188  cd ..
+  189  cd complex-elastic-beanstalk/
+  190  ls
+  191  cp -r client/nginx/ ../complex/client
+  192  ls
+  193  cd ../complex
+  194  ls
+  195  cd client
+  196  ls
+  197  cd ..
+  198  ls
+  199  cd client
+  200  ls
+  201  cd ..
+  202  ls
+  203  cd ..
+  204  ls
+  205  mv complex complex_bad
+  206  cp -r complex-elastic-beanstalk/ complex
+  207  ls
+  208  cd complex
+  209  ls
+  210  ls -a
+  211  rm -rf .git
+  212  cd client
+  213  ls
+  214  cd ..
+  215  ls
+  216  rm -rf nginx
+  217  ls
+  218  cd ..
+  219  ls
+  220  cd complex
+  221  ;s
+  222  ls
+  223  ls -a
+  224  pwd
+  225  ls
+  226  cd client
+  227  ls
+  228  cd ..
+  229  ls
+  230  ls -a
+  231  docker ps
+  232  env | grep docker
+  233  env | grep eval
+  234  env | grep -i docker
+  235  docker ps
+  236  docker kill e100367ab9de
+  237  kubectl get deployments
+  238  kubectl delete deployment client-deployment
+  239  kubectl get deployments
+  240  kubectl get services
+  241  kubectl delete service client-node-port
+  242  kubectl get services
+  243  pwd
+  244  kubectl apply -f k8s/
+  245  kubectl apply -f k8s/
+  246  kubectl apply -f k8s/
+  247  kubectl get deployments
+  248  kubectl get services
+  249  kubectl apply -f k8s
+  250  kubectl apply -f k8s
+  251  kubectl get deployments
+  252  kubectl get pods
+  253  kubectl get deployments
+  254  docker ps
+  255  env | grep -i docker
+  256  kubectl apply -f k8s
+  257  docker ps
+  258  docker kill 62e256756dd1
+  259  docker kill c9641a031239
+  260  docker kill c566873a00fa
+  261  docker ps
+  262  docker kill 5da9b2a16d19
+  263  docker kill d46be18a928f
+  264  docker ps
+  265  kubectl apply -f k8s
+  266  kubectl apply -f k8s
+  267  kubectl apply -f k8s
+  268  kubectl get pods
+  269  kubectl get deployments
+  270  kubectl get services
+  271  minikube ip
+  272  kubectl get storageclass
+  273  kubectl describe storageclass
+  274  pwd
+  275  kubectl apply -f k8s/
+  276  kubectl get deployments
+  277  kubectl get pods
+  278  kubectl get pv
+  279  kubectl get pvc
+  280  kubectl get services
+  281  kubectl create secret generic pgpassword --from-literal PGPASSWORD=postgres
+  282  kubectl get secrets
+  283  kubectl apply -f k8s
+  284  kubectl apply -f k8s
+  285  kubectl get services
+  286  kubectl get deployments
+  287  kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.26.2/deploy/static/mandatory.yaml
+  288  minikube addons enable ingress
+  289  kubectl apply -f k8s
+  290  minikube ip
+  291  kubectl apply -f k8s
+  292  ls
+  293  pwd
+  294  git init
+  295  git add .
+  296  git status
+  297  git commit -m "initial working version on local minikube"
+  298  git remote add https://github.com/cuffycoder/multi-docker-k8s-minikube.git
+  299  history | grep remote
+  300  git remote add origin  https://github.com/cuffycoder/multi-docker-k8s-minikube.git
+  301  git remote -v
+  302  git push origin master
+  303  minikube dashboard
+  304  pwd
+  305  ls
+  306  touch .travis.yaml
+  307  touch .travis.yml
+  308  rm .travis.yaml
+  309  pwd
+  310  docker run -it -v $(PWD):/app ruby:2.3 sh
+  311  ls
+  312  pwd
+  313  git status
+  314  git add .
+  315  git commit -m "add encrypted service account file" .
+  316  echo $GIT_SHA
+  317  git rev-parse HEAD
+  318  history | grep PASSWORD
+  319  curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh
+  320  chmod 700 get_helm.sh
+  321  ./get_helm.sh
+  322  pwd
+  323  git status
+  324  git add . 
+  325  git commit -m "add deploy script" .
+  326  git push origin master
+  327  pwd
+  328  git checkout -b dev
+  329  git status
+  330  git add .
+  331  git commit -m "updated title"
+  332  git push origin dev
+  333  exit
+  334  cd dev
+  335  pwd
+  336  ls
+  337  rmdir node_modules/
+  338  rm -rf node_modules
+  339  ls
+  340  docker ps
+  341  docker attach eba1c9cd668d
+  342  docker exec -it cb63d1f1bd20 sh
+  343  pwd
+  344  cd ..
+  345  cd complex
+  346  cd server
+  347  docker build -f Dockerfile.dev .
+  348  docker run 05882811aff7
+  349  cd ..
+  350  cd worker
+  351  docker build -f Dockerfile.dev .
+  352  docker run 271b555473c9
+  353  which code
+  354  cd ..
+  355  pws
+  356  pwd
+  357  docker-compose up
+  358  docker-compose up
+  359  docker ps
+  360  docker logs 97a2f558332e
+  361  minikube status
+  362  minikube status
+  363  minikube status
+  364  minikube status
+  365  minikube status
+  366  minikube status
+  367  kubectl -cluster-info
+  368  kubectl cluster-info
+  369  kubectl cluster-info -p gavkube
+  370  kubectl cluster-info
+  371  kubectl cluster-info
+  372  pwd
+  373  ls
+  374  cd ..
+  375  ls
+  376  cd simplek8s/
+  377  ls
+  378  kubectl -f ./client-pod.yaml
+  379  kubectl apply -f ./client-pod.yaml
+  380  kubectl apply -f ./client-pod.yaml
+  381  kubectl apply -f ./client-pod.yaml
+  382  kubectl apply -f ./client-pod.yaml
+  383  kubectl apply -f ./client-node-port.yaml 
+  384  kubectl get pods
+  385  kubectl get services
+  386  docker ps
+  387  minikube ip
+  388  kubectl apply -f ./client-pod.yaml
+  389  kubectl apply -f ./client-node-port.yaml 
+  390  history
+  391  minikube ip
+  392  pwd
+  393  cd ..
+  394  ls
+  395  cd complex
+  396  git status
+  397  git add .
+  398  git commit -m "try removing try_files to fix flickering issue" 
+  399  git push origin master
+  400  cd ..
+  401  ls
+  402  cd simplek8s/
+  403  ;s
+  404  ls
+  405  history
+  406  kubectl apply -f ./client-pod.yaml
+  407  kubectl apply -f ./client-node-port.yaml 
+  408  touch client-pod.yaml 
+  409  touch client-node-port.yaml 
+  410  kubectl apply -f ./client-pod.yaml
+  411  touch client-node-port.yaml 
+  412  kubectl apply -f ./client-pod.yaml
+  413  minikube remove
+  414  history | grep minkube
+  415  history | grep minikube
+  416  minikube ip
+  417  minikube ip
+  418  minikube ip
+  419  history | grep kubectl
+  420  kubectl apply -f ./client-pod.yaml
+  421  kubectl apply -f ./client-node-port.yaml 
+  422  minikube ip
+  423  minikube status
+  424  minikube ip
+  425  ls
+  426  minikube ip
+  427  cd ..
+  428  ls
+  429  pwd
+  430  minikube status
+  431  history | grep kubectl
+  432  kubectl apply -f ./client-pod.yaml
+  433  pwd
+  434  cd simplek8s/
+  435  kubectl apply -f ./client-pod.yaml
+  436  kubectl apply -f ./client-pod.yaml
+  437  minikube status
+  438  kubectl apply -f ./client-pod.yaml
+  439  kubectl apply -f ./client-node-port.yaml 
+  440  minikube status
+  441  minikube ip
+  442  minikube status
+  443  minikube get services
+  444  kubectl get services
+  445  pwd
+  446  kubctl apply -f ./client-pod.yaml 
+  447  kubectl apply -f ./client-pod.yaml 
+  448  kubectl get pods
+  449  kubectl get pods
+  450  kubectl get pods
+  451  kubectl get pods
+  452  kubectl get pods
+  453  kubectl get pods
+  454  kubectl get pods
+  455  docker ps
+  456  kubectl get pods
+  457  kubectl describe client-pod
+  458  kubectl describe pod client-pod
+  459  kubectl describe pod client-pod
+  460  kubctl apply -f ./client-pod.yaml 
+  461  kubectl apply -f ./client-pod.yaml 
+  462  kubectl get pods
+  463  history
+  464  kubectl describe pod client-pod
+  465  kubectl get pods
+  466  kubectl delete -f ./client-pod.yaml
+  467  kubectl get pods
+  468  kubectl apply -f ./client-deployment.yaml 
+  469  kubectl apply -f ./client-deployment.yaml 
+  470  kubectl get pods
+  471  minikube ip
+  472  kubectl get deployments
+  473  kubectl get deployments 
+  474  history
+  475  kubectl apply -f ./client-deployment.yaml  ; kubectl get deployments
+  476  kubectl apply -f ./client-deployment.yaml  ; kubectl get deployments
+  477  kubectl get deployments 
+  478  cd ..
+  479  ls
+  480  cd complex
+  481  cd client
+  482  ls
+  483  docker build -t cuffycoder/multi-client .
+  484  docker push cuffycoder/multi-client
+  485  kubectl set image deployment/client-deployment client=cuffycoder/multi-client
+  486  pwd
+  487  docker build -t cuffycoder/multi-client:v2 
+  488  docker build -t cuffycoder/multi-client:v2 .
+  489  docker push cuffycoder/multi-client:v2
+  490  kubectl set image deployment/client-deployment client=cuffycoder/multi-client:v2
+  491  docker ps
+  492  lspwd
+  493  pwd
+  494  exit
+  495  pwd
+  496  ll
+  497  pwd
+  498  kafka-topics.sh
+  499  kafka-topics --zookeeper 127.0.0.1:2181 --topic first_topic --create
+  500  kafka-topics.sh --zookeeper 127.0.0.1:2181 --topic first_topic --create
+  501  kafka-topics.sh --zookeeper 127.0.0.1:2181 --topic first_topic --create --partitions 3 --replication-factor 2
+  502  kafka-topics.sh --zookeeper 127.0.0.1:2181 --topic first_topic --create --partitions 3 --replication-factor 1
+  503  kafka-topics.sh --zookeeper 127.0.0.1:2181 --list
+  504  kafka-topics.sh --zookeeper 127.0.0.1:2181 --topic first_topic --describe
+  505  kafka-topics.sh --zookeeper 127.0.0.1:2181 --topic second_topic --create --partitions 6 --replication-factor 1
+  506  history
+  507  kafka-topics.sh --zookeeper 127.0.0.1:2181 --list
+  508  kafka-topics.sh --zookeeper 127.0.0.1:2181 --topic second_topic --delete
+  509  history
+  510  kafka-topics.sh --zookeeper 127.0.0.1:2181 --list
+  511  kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic first_topic
+  512  kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic first_topic --producer-property acks=all
+  513  kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic firnew_topic
+  514  history
+  515  kafka-topics.sh --zookeeper 127.0.0.1:2181 --list
+  516  kafka-topics.sh --zookeeper 127.0.0.1:2181 --topic firnew_topic --describe
+  517  pwd
+  518  vi config/server.properties 
+  519  vi config/server.properties 
+  520  kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic first_topic
+  521  kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic first_topic --from-beginning
+  522  kafka-console-producer.sh --broker-list localhost:9092 --topic word-count-input
+  523  pwd
+  524  cd
+  525  cd dev
+  526  cd Compression/
+  527  ls
+  528  git init
+  529  git status
+  530  cd ..
+  531  ls
+  532  find . -name .gitignore -print
+  533  find . -name .gitignore -print
+  534  cat PlayingCardService/.gitignore 
+  535  cp PlayingCardService/.gitignore ~/dev/Compression/
+  536  ls
+  537  cd Compression/
+  538  git status
+  539  git add .
+  540  git commit -m "initial revision"
+  541  git remote add https://github.com/cuffycoder/Compression.git
+  542  git remote add origin https://github.com/cuffycoder/Compression.git
+  543  git push origin master
+  544  git status
+  545  git status
+  546  git pull origin maste
+  547  git pull origin master
+  548  ls
+  549  rm src/main/java/HuffmanTree.java
+  550  rm src/test/java/HuffmanTreeTest.java  src/main/java/Stack.java src/test/java/StackTest.java
+  551  git pull origin master
+  552  git stats
+  553  git status
+  554  git add .
+  555  git commit -m "recreate tree from header string" .
+  556  git push origin master
+  557  git pull origin master
+  558  pwd
+  559  ls
+  560  ls
+  561  ls
+  562  cd src
+  563  cd man
+  564  cd main
+  565  cd bin
+  566  history
+  567  history >history.txt
