@@ -47,7 +47,7 @@ public class StringPartCompressor {
 
     private ArrayList<String> getSegments() {
         int keywordSegmentLength = largestSegmentLength;
-        HashMap<String, Integer> keywords = filterKeywordsByThreshold(keywordSegmentLength, 2 );
+        HashMap<String, Integer> keywords = filterKeywordsByThreshold(keywordSegmentLength, 5 );
         ArrayList<String> segments = new ArrayList<String>();
 
         String currWord = "";
@@ -67,7 +67,7 @@ public class StringPartCompressor {
 
     private HashMap<String, Integer> filterKeywordsByThreshold(int segmentLength, float percentThreshold) {
         // include those where: (chars in segment * frequency) >= 5% of the total length of the string
-        int keywordThreshold = (int) (this.inputString.length() * (percentThreshold / 100) * segmentLength);
+        int keywordThreshold = (int) ((this.inputString.length() * (percentThreshold / 100) ) / segmentLength);
 
         // get the segments for each length
         HashMap<String, Integer> potentialKeyWords = getFrequencyTableStringsOfLength(segmentLength);

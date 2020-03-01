@@ -12,7 +12,7 @@ public class HuffmanBitStream {
     private static long[] masks;
 
     private static char[] BASE_ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
-    private static HashMap<Character,Integer> baseAlphabetMap;
+    private static HashMap<Character, Integer> baseAlphabetMap;
     private static String delimitter = " ";
 
     public HuffmanBitStream() {
@@ -21,11 +21,11 @@ public class HuffmanBitStream {
         bitPosWorkingBlock = 0;
 
         // initialize this to make decoding faster
-        baseAlphabetMap = new HashMap<Character,Integer>();
+        baseAlphabetMap = new HashMap<Character, Integer>();
 
         int idx = 0;
-        for( char c : BASE_ALPHABET ) {
-            baseAlphabetMap.put( c, idx );
+        for (char c : BASE_ALPHABET) {
+            baseAlphabetMap.put(c, idx);
             idx++;
         }
 
@@ -34,29 +34,29 @@ public class HuffmanBitStream {
         masks = new long[blockSize];
         masks[0] = 1L;
 
-        for( int i = 1; i < blockSize; i++ ) {
-            masks[i] = masks[i-1] * 2;
+        for (int i = 1; i < blockSize; i++) {
+            masks[i] = masks[i - 1] * 2;
         }
     }
 
-    public HuffmanBitStream( String base62EncodedString ) {
+    public HuffmanBitStream(String base62EncodedString) {
 
         // first call the normal constructor
         this();
 
-        String[] parts = base62EncodedString.split( delimitter );
+        String[] parts = base62EncodedString.split(delimitter);
 
-        if( parts.length > 0 ) {
+        if (parts.length > 0) {
 
             // first part is the number of bits
-            long numBits = intFromBase62EncodedString( parts[0] );
+            long numBits = intFromBase62EncodedString(parts[0]);
 
             this.totalBitsSet = numBits;
 
-            for( int idx = 1; idx < parts.length; idx++ ) {
-                long block = intFromBase62EncodedString( parts[idx] );
+            for (int idx = 1; idx < parts.length; idx++) {
+                long block = intFromBase62EncodedString(parts[idx]);
 
-                blockList.add( block );
+                blockList.add(block);
             }
         }
 
@@ -100,31 +100,33 @@ public class HuffmanBitStream {
             while (bitsLeftToPush > 0 && bitPos >= 0) {
 
                 if ((currBlock & (masks[bitPos])) != 0)
-                    bitStack.push( true );
+                    bitStack.push(true);
                 else
-                    bitStack.push( false );
+                    bitStack.push(false);
 
                 bitsLeftToPush--;
                 bitPos--;
             }
         }
 
-        Collections.reverse( bitStack );
+        Collections.reverse(bitStack);
         return bitStack;
     }
 
 
-    public long numBitsInStream() { return totalBitsSet; }
+    public long numBitsInStream() {
+        return totalBitsSet;
+    }
 
     public String toBase62String() {
 
         String result = "";
 
         // first 32 bits are the number of bits in the stream
-        result += intToBase62( numBitsInStream() );
+        result += intToBase62(numBitsInStream());
 
-        for( Long block : this.blockList ) {
-            result += delimitter + intToBase62( block );
+        for (Long block : this.blockList) {
+            result += delimitter + intToBase62(block);
         }
 
         return result;
@@ -132,42 +134,45 @@ public class HuffmanBitStream {
 
     public void showBlocks() {
 
-        for( long block : blockList )
-            System.out.println( block + "\t" + Long.toBinaryString( block ) );
+        for (long block : blockList)
+            System.out.println(block + "\t" + Long.toBinaryString(block));
     }
 
-    private String intToBase62( long n ) {
+    private String intToBase62(long n) {
         StringBuilder result = new StringBuilder();
 
-        if( 0 == n ) {
-            result.append( BASE_ALPHABET[0] );
+        if (0 == n) {
+            result.append(BASE_ALPHABET[0]);
         }
 
         long base_len = BASE_ALPHABET.length;
         long c = n;
 
-        while( c != 0 ) {
+        while (c != 0) {
             long rem = Long.remainderUnsigned(c, base_len);
-            c = Long.divideUnsigned( c, base_len );
-            result.append( BASE_ALPHABET[ (int) rem] );
+            c = Long.divideUnsigned(c, base_len);
+            result.append(BASE_ALPHABET[(int) rem]);
         }
 
         return result.reverse().toString();
     }
 
-    private long intFromBase62EncodedString( String base62EncodedString ) {
+    private long intFromBase62EncodedString(String base62EncodedString) {
         char[] chars = base62EncodedString.toCharArray();
 
         int base_len = BASE_ALPHABET.length;
         int num_chars = chars.length;
         long result = 0;
-        for( int idx = 0; idx < num_chars; idx++ ) {
-            int power = num_chars - ( idx + 1 );
+        for (int idx = 0; idx < num_chars; idx++) {
+            int power = num_chars - (idx + 1);
 
-            long digit_value = baseAlphabetMap.get( chars[idx] );
-            long pos_value = (long) Math.pow( base_len, power );
+            if (!baseAlphabetMap.containsKey(chars[idx]))
+                continue;
 
-            result +=  pos_value * digit_value;
+            long digit_value = baseAlphabetMap.get(chars[idx]);
+            long pos_value = (long) Math.pow(base_len, power);
+
+            result += pos_value * digit_value;
         }
 
         return result;
@@ -180,20 +185,20 @@ public class HuffmanBitStream {
 
 
         for (int i = 0; i < blockList.size(); i++) {
-                Long currBlock = blockList.get(i);
-                int bitPos = blockSize - 1;
+            Long currBlock = blockList.get(i);
+            int bitPos = blockSize - 1;
 
-                while( bitsLeftToPrint > 0 && bitPos >= 0 ) {
+            while (bitsLeftToPrint > 0 && bitPos >= 0) {
 
-                    if ((currBlock & (masks[bitPos])) != 0)
-                        result += "1";
-                    else
-                        result += "0";
+                if ((currBlock & (masks[bitPos])) != 0)
+                    result += "1";
+                else
+                    result += "0";
 
-                    bitsLeftToPrint--;
-                    bitPos--;
-                }
+                bitsLeftToPrint--;
+                bitPos--;
             }
+        }
 
 
         return result;

@@ -9,7 +9,7 @@ public class StringPartCompressorTest {
     @Test
     public void testCompressUncompress() {
         ArrayList<String> testStrings = new ArrayList<String>();
-
+/*
         testStrings.add( "" );
         testStrings.add( "a" );
         testStrings.add( "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" );
@@ -63,9 +63,29 @@ public class StringPartCompressorTest {
                 "All these things, and a thousand like them, came to pass in and close upon the dear old year one thousand seven hundred and seventy-five. Environed by them, while the Woodman and the Farmer worked unheeded, those two of the large jaws, and those other two of the plain and the fair faces, trod with stir enough, and carried their divine rights with a high hand. Thus did the year one thousand seven hundred and seventy-five conduct their Greatnesses, and myriads of small creatures—the creatures of this chronicle among the rest—along the roads that lay before them.\n" +
                 "\n" +
                 "\n");
+*/
+        testStrings.add( "Eternal Father bless our land\n" +
+                "Guard us with Thy mighty hand\n" +
+                "Keep us free from evil powers\n" +
+                "Be our light through countless hours\n" +
+                "To our leaders, Great Defender,\n" +
+                "Grant true wisdom from above\n" +
+                "Justice, truth be ours forever\n" +
+                "Jamaica, land we love\n" +
+                "Jamaica, Jamaica, Jamaica, land we love.\n" +
+                "\n" +
+                "Teach us true respect for all\n" +
+                "Stir response to duty's call\n" +
+                "Strengthen us the weak to cherish\n" +
+                "Give us vision lest we perish\n" +
+                "Knowledge send us, Heavenly Father,\n" +
+                "Grant true wisdom from above\n" +
+                "Justice, truth be ours forever\n" +
+                "Jamaica, land we love\n" +
+                "Jamaica, Jamaica, Jamaica, land we love.");
 
         for( String testString : testStrings ) {
-            StringPartCompressor compressor = new StringPartCompressor( testString, 3 );
+            StringPartCompressor compressor = new StringPartCompressor( testString, 1 );
 
             String compressedText = compressor.getCompressedText();
 
